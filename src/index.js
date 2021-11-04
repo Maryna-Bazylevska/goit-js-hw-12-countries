@@ -12,14 +12,12 @@ function onInput(e) {
   refs.countriesList.innerHTML = '';
   API.fetchCountries(userCountry)
     .then(renderMarkup)
-    .catch(error => {
-      const myError = error({
-        text: 'Nothing was found for your query!',
-        delay: 250,
-      }); 
-    });
+    .catch(onError);
 }
 function renderMarkup(countries) {
+  if (countries.status === 404) {
+    errorMessage('Nothing was found for your query!');
+  }
   if (countries.length > 10) {
     error({
       text: 'Too many matches found. Please enter a more specific query!',
@@ -34,4 +32,15 @@ function renderMarkup(countries) {
     refs.countriesList.innerHTML = countryItemTemplate(...countries);
   }
 }
-
+function onError(error){
+  notice({
+    text: 'Invalid entered value',
+    delay: 1000,
+});
+}
+function errorMessage(message) {
+  error ({
+          title:`${message}`,
+          delay: 1000,    
+      });
+}
