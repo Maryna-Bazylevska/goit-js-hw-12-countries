@@ -13,7 +13,10 @@ function onInput(e) {
   API.fetchCountries(userCountry)
     .then(renderMarkup)
     .catch(error => {
-      console.log(error);
+      const myError = error({
+        text: 'Nothing was found for your query!',
+        delay: 250,
+      }); 
     });
 }
 function renderMarkup(countries) {
@@ -23,9 +26,7 @@ function renderMarkup(countries) {
       delay: 250,
     });
   }
-  if (countries.status === 404) {
-    errorMessage('Nothing was found for your query!');
-  }
+ 
   if (countries.length > 1 && countries.length < 10) {
     refs.countriesList.innerHTML = previewCountry(countries);
   }
